@@ -1,5 +1,21 @@
 import ProductCatalogCP from "@/components/product/productCatalogCP";
 
+export async function generateStaticParams() {
+  // const res = await fetch(
+  //   `http://localhost:8080/api/products/countCatalog?size=4`
+  // );
+
+  // const pageCount = await res.json();
+  // const arr = [];
+  // for (let i = 1; i <= pageCount; i++) {
+  //   arr.push({ page: String(i) });
+  // }
+
+  const arr = [{ page: "1" }, { page: "2" }];
+
+  return arr;
+}
+
 export default async function ProductCatalogPage({ params, searchParams }) {
   const param = await params;
   const pageStr = param.page || "1";
