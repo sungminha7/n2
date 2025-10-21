@@ -1,3 +1,5 @@
+import ProductViewCP from "@/components/product/productView.CP";
+
 export default async function ProductViewPage({ params, searchParams }) {
   const param = await params;
   const pno = param.pno;
@@ -14,6 +16,7 @@ export default async function ProductViewPage({ params, searchParams }) {
   return (
     <div>
       <div>Product View Page</div>
+      <ProductViewCP product={product} />
     </div>
   );
 }

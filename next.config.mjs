@@ -10,6 +10,20 @@ const nextConfig = {
       },
     ],
   },
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "40mb",
+    },
+  },
+  async redirects() {
+    return [
+      {
+        source: "/product",
+        destination: "/product/catalog/1",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;
