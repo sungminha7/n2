@@ -17,7 +17,7 @@ export default function ProductCatalogCP({ products, total, current, size }) {
           <Link href={`/product/view/${product.pno}`} key={product.pno}>
             <li key={product.pno} className="m-2 p-1 border">
               <div>PNO: {product.pno}</div>
-              <div>NAME: {product.name}</div>
+              <div>NAME: {product.pname}</div>
               <div>PRICE: {product.price}</div>
               <div className="relative w-1/3 h-40">
                 <Image
