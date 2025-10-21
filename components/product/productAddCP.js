@@ -1,6 +1,7 @@
 "use client";
 
 import { postProduct } from "@/actions/productActions";
+import { useRouter } from "next/navigation";
 import { useActionState } from "react";
 
 export default function ProductAddCP() {
@@ -9,9 +10,21 @@ export default function ProductAddCP() {
     result: "",
   });
 
+  const router = useRouter();
+
   return (
     <div>
       <div>Product Add components</div>
+      {state.result === "success" && (
+        <div
+          onClick={(e) => {
+            router.push(`/product/catalog/1`);
+          }}
+        >
+          <div>New Product Added</div>
+        </div>
+      )}
+
       <form action={action}>
         <div>
           상품이름

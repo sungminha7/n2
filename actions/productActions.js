@@ -1,5 +1,7 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
+
 const API_SERVER_HOST = process.env.API_SERVER_HOST || "http://localhost:8080";
 
 export const postProduct = async (prevState, formData) => {
@@ -34,6 +36,8 @@ export const postProduct = async (prevState, formData) => {
   if (!response.ok) {
     throw new Error("Failed to post product");
   }
+
+  revalidatePath("/product/catalog/1");
 
   return { message: "Product created successfully", result: "success" };
 };
