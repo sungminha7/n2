@@ -1,6 +1,7 @@
 import Image from "next/image";
+import Link from "next/link";
 
-export default function ProductViewCP({ product }) {
+export default function ProductViewCP({ product, from }) {
   console.log("product: ", product);
 
   return (
@@ -25,6 +26,12 @@ export default function ProductViewCP({ product }) {
           />
         </div>
       ))}
+
+      <div>
+        <Link href={from}>
+          <button>이전 화면</button>
+        </Link>
+      </div>
     </div>
   );
 }

@@ -2,6 +2,8 @@ import ProductViewCP from "@/components/product/productView.CP";
 
 export default async function ProductViewPage({ params, searchParams }) {
   const param = await params;
+  const query = await searchParams;
+
   const pno = param.pno;
 
   console.log("Product View pno: ", pno);
@@ -13,10 +15,14 @@ export default async function ProductViewPage({ params, searchParams }) {
 
   console.log("product: ", product);
 
+  const from = query.from
+    ? decodeURIComponent(query.from)
+    : "/product/catalog/1";
+
   return (
     <div>
       <div>Product View Page</div>
-      <ProductViewCP product={product} />
+      <ProductViewCP product={product} from={from} />
     </div>
   );
 }
