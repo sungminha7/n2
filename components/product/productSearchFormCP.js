@@ -40,6 +40,7 @@ export default function ProductSearchFormCP() {
             value={size}
             onChange={(e) => setSize(() => e.target.value)}
           >
+            <option value="5">5개 보기</option>
             <option value="10">10개 보기</option>
             <option value="20">20개 보기</option>
             <option value="50">50개 보기</option>
