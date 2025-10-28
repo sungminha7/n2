@@ -32,42 +32,43 @@ export default function ProductSearchFormCP() {
   };
 
   return (
-    <div>
-      <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
-        <div>
-          <select
-            name="size"
-            value={size}
-            onChange={(e) => setSize(() => e.target.value)}
-          >
-            <option value="5">5개 보기</option>
-            <option value="10">10개 보기</option>
-            <option value="20">20개 보기</option>
-            <option value="50">50개 보기</option>
-          </select>
-        </div>
-        <div className="w-full sm:w-auto sm:max-w-[150px]">
-          <select
-            name="sort"
-            value={sort}
-            onChange={(e) => setSort(() => e.target.value)}
-          >
-            <option value="b">기본순</option>
-            <option value="d">출시순</option>
-            <option value="ph">높은 가격순</option>
-            <option value="pl">낮은 가격순</option>
-          </select>
-        </div>
-        <div className="flex w-full sm:w-auto sm:max-w-xs">
-          <input
-            type="text"
-            name="keyword"
-            placeholder="상품명 검색..."
-            value={keyword}
-            onChange={(e) => setKeyword(() => e.target.value)}
-          />
-        </div>
-        <button type="submit" onClick={handleClickSearchButton}>
+    <div className="bg-white p-6 rounded-lg shadow-md">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full">
+        <select
+          name="size"
+          value={size}
+          onChange={(e) => setSize(() => e.target.value)}
+          className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        >
+          <option value="5">5개 보기</option>
+          <option value="10">10개 보기</option>
+          <option value="20">20개 보기</option>
+          <option value="50">50개 보기</option>
+        </select>
+        <select
+          name="sort"
+          value={sort}
+          onChange={(e) => setSort(() => e.target.value)}
+          className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        >
+          <option value="b">기본순</option>
+          <option value="d">출시순</option>
+          <option value="ph">높은 가격순</option>
+          <option value="pl">낮은 가격순</option>
+        </select>
+        <input
+          type="text"
+          name="keyword"
+          placeholder="상품명 검색..."
+          value={keyword}
+          onChange={(e) => setKeyword(() => e.target.value)}
+          className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        />
+        <button
+          type="submit"
+          onClick={handleClickSearchButton}
+          className="px-6 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors duration-200 font-medium"
+        >
           검색
         </button>
       </div>

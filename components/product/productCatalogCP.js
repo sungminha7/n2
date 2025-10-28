@@ -13,35 +13,90 @@ export default function ProductCatalogCP({ products, total, current, size }) {
   const from = encodeURIComponent(`/product/catalog/${current}`);
 
   return (
-    <div>
-      <ul>
+    <div className="space-y-6">
+      <div className="text-sm text-gray-600 mb-4">
+        총 {total}개의 상품이 있습니다.
+      </div>
+      <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {products.map((product) => (
-          <Link
-            href={`/product/view/${product.pno}?from=${from}`}
-            key={product.pno}
-          >
-            <li key={product.pno} className="m-2 p-1 border">
-              <div>PNO: {product.pno}</div>
-              <div>NAME: {product.pname}</div>
-              <div>PRICE: {product.price}</div>
-              <div className="relative w-1/3 h-40">
-                <Image
-                  src={`http://localhost:8080/s_${product.fileName}`}
-                  width={100}
-                  height={50}
-                  alt={product.name}
-                  fillstyle={{ bojectFit: "cover" }}
-                  sizes="33vw"
-                  priority={true}
-                />
+          <li key={product.pno} className="group">
+            <Link href={`/product/view/${product.pno}?from=${from}`}>
+              <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 h-full flex flex-col">
+                <div className="relative aspect-[4/3] w-full bg-gray-100">
+                  <Image
+                    src={`http://localhost:8080/s_${product.fileName}`}
+                    alt={product.pname}
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    priority={true}
+                    className="object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+                <div className="p-4 flex-1 flex flex-col">
+                  <div className="text-xs text-gray-400 mb-2">
+                    상품번호: {product.pno}
+                  </div>
+                  <div className="text-lg font-semibold text-gray-800 mb-2 line-clamp-2">
+                    {product.pname}
+                  </div>
+                  <div className="text-xl font-bold text-indigo-600 mt-auto">
+                    {product.price.toLocaleString()}원
+                  </div>
+                </div>
               </div>
-            </li>
-          </Link>
+            </Link>
+          </li>
         ))}
       </ul>
 
-      {prev && <Link href={`/product/catalog/${current - 1}`}>Prev</Link>}
-      {next && <Link href={`/product/catalog/${current + 1}`}>Next</Link>}
+      {/* 페이지네이션 */}
+      <div className="flex justify-center items-center gap-4 mt-8 mb-8">
+        {prev && (
+          <Link
+            href={`/product/catalog/${current - 1}`}
+            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white rounded-lg border border-gray-300 hover:bg-gray-50 hover:border-indigo-500 transition-all duration-200 flex items-center gap-1"
+          >
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+            이전
+          </Link>
+        )}
+        <div className="px-4 py-2 text-sm font-medium">
+          {current} / {lastPage}
+        </div>
+        {next && (
+          <Link
+            href={`/product/catalog/${current + 1}`}
+            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white rounded-lg border border-gray-300 hover:bg-gray-50 hover:border-indigo-500 transition-all duration-200 flex items-center gap-1"
+          >
+            다음
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </Link>
+        )}
+      </div>
     </div>
   );
 }

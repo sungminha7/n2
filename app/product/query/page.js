@@ -27,8 +27,10 @@ export default async function ProductQueryPage({ params, searchParams }) {
   console.log(result);
 
   return (
-    <div>
-      <div>Product Query Page</div>
+    <div className="space-y-6">
+      <div className="text-center text-3xl font-bold text-gray-800 mb-8">
+        상품 검색
+      </div>
       <ProductSearchFormCP />
       <ProductQueryListCP
         list={result.list}
