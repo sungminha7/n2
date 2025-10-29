@@ -12,32 +12,87 @@ export const postProduct = async (prevState, formData) => {
   const writer = formData.get("writer");
   const files = formData.getAll("files");
 
-  const updateFormData = new FormData();
-  updateFormData.append("pname", pname);
-  updateFormData.append("price", price);
-  updateFormData.append("writer", writer);
-  updateFormData.append("sale", true);
+  const updatedFormData = new FormData();
+  updatedFormData.append("pname", pname);
+  updatedFormData.append("price", price);
+  updatedFormData.append("writer", writer);
+  updatedFormData.append("sale", true);
 
   console.log("files.length: ", files.length);
   if (files.length > 0) {
     files.forEach((file) => {
       if (file && file.size > 0) {
         console.log("file size: ", file.size);
-        updateFormData.append("files", file);
+        updatedFormData.append("files", file);
       }
     });
   }
 
   const response = await fetch(`${API_SERVER_HOST}/api/products`, {
     method: "POST",
-    body: updateFormData,
+    body: updatedFormData,
   });
 
   if (!response.ok) {
     throw new Error("Failed to post product");
   }
 
-  revalidatePath("/product/catalog/1");
+  revalidatePath("/products/catalog/1");
 
   return { message: "Product created successfully", result: "success" };
+};
+
+export const putProduct = async (prevState, formData) => {
+  console.log("putProduct called");
+
+  const pno = formData.get("pno");
+
+  const updatedFormData = new FormData();
+  updatedFormData.append("pname", formData.get("pname"));
+  updatedFormData.append("price", formData.get("price"));
+  updatedFormData.append("sale", formData.get("sale"));
+
+  const fileNames = formData.getAll("fileNames");
+  console.log("fileNames.length: ", fileNames.length);
+
+  // Append all files to the new FormData object
+  if (fileNames.length > 0) {
+    fileNames.forEach((fileName) => {
+      updatedFormData.append("fileNames", fileName);
+    });
+  }
+
+  // Make the fetch request
+  const response = await fetch(`${API_SERVER_HOST}/api/products/${pno}`, {
+    method: "PUT",
+    body: updatedFormData,
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error("Failed to update product: ", errorText);
+    return { message: "Failed to update product", result: "fail" };
+  }
+
+  revalidatePath(`/products/view/${pno}`);
+
+  return { message: "Product updated successfully", result: "success" };
+};
+
+export const deleteProduct = async (prevState, formData) => {
+  const pno = formData.get("pno");
+
+  console.log("deleteProduct called with pno: ", pno);
+
+  const response = await fetch(`${API_SERVER_HOST}/api/products/${pno}`, {
+    method: "DELETE",
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to delete product");
+  }
+
+  revalidatePath(`/products/view/${pno}`);
+
+  return { message: "Product deleted successfully", result: "success" };
 };
