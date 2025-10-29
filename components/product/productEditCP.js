@@ -1,6 +1,7 @@
 "use client";
 
 import { deleteProduct, putProduct } from "@/actions/productActions";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useActionState, useEffect } from "react";
 
@@ -55,6 +56,30 @@ export default function ProductEditCP({ product, from }) {
             <option value="true">판매</option>
             <option value="false">판매중지</option>
           </select>
+        </div>
+        <div>
+          <ul className="flex flex-wrap">
+            {fileNames.map((fileName) => (
+              <li key={fileName} className="relative w-48 h-48 mr-4 mb-4">
+                <Image
+                  src={`http://localhost:8080/${fileName}`}
+                  alt={product.pname}
+                  fill
+                  style={{ objectFit: "cover" }}
+                  className="rounded-md"
+                />
+                <button
+                  type="button"
+                  className="absolute top-0 right-0 -mt-2 -mr-2 z-10 w-6 h-6 rounded-full bg-red-600 text-white text-xs flex items-center justify-center hover:bg-red-700 transition-colors"
+                >
+                  X
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <button type="submit">수정</button>
         </div>
       </form>
 
