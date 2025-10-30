@@ -50,15 +50,28 @@ export const putProduct = async (prevState, formData) => {
   const updatedFormData = new FormData();
   updatedFormData.append("pname", formData.get("pname"));
   updatedFormData.append("price", formData.get("price"));
+  updatedFormData.append("writer", formData.get("writer"));
   updatedFormData.append("sale", formData.get("sale"));
 
   const fileNames = formData.getAll("fileNames");
   console.log("fileNames.length: ", fileNames.length);
 
-  // Append all files to the new FormData object
+  // Append all existing file names to the new FormData object
   if (fileNames.length > 0) {
     fileNames.forEach((fileName) => {
       updatedFormData.append("fileNames", fileName);
+    });
+  }
+
+  // Append new uploaded files
+  const files = formData.getAll("files");
+  console.log("files.length: ", files.length);
+  if (files.length > 0) {
+    files.forEach((file) => {
+      if (file && file.size > 0) {
+        console.log("file size: ", file.size);
+        updatedFormData.append("files", file);
+      }
     });
   }
 
