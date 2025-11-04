@@ -1,8 +1,14 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import KakaoProvider from "next-auth/providers/kakao";
 
 export const authOptions = {
   providers: [
+    KakaoProvider({
+      clientId: process.env.KAKAO_CLIENT_ID,
+      clientSecret: process.env.KAKAO_CLIENT_SECRET,
+    }),
+
     CredentialsProvider({
       name: "Credentials",
       credentials: {
@@ -37,32 +43,62 @@ export const authOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ token, user, account }) {
-      console.log("jwt params : jwt--------------------");
-      if (user) {
-        token.id = user.id;
-        token.role = user.role;
-        token.email = user.email;
-        token.name = user.nickname;
+    async jwt({ token, account, profile, user }) {
+      //kakao
+      if (account?.provider === "kakao" && profile) {
+        const res = await fetch("http://localhost:8080/api/accounts/social", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Cache-Control": "no-store",
+          },
+          body: new URLSearchParams({ email: profile.kakao_account.email }),
+        });
 
-        token.accessToken = user.accessToken;
-        token.refreshToken = user.refreshToken;
-        token.expiresAt = Date.now() + 1000 * 60 * 60;
+        const result = await res.json();
+
+        token.id = result.email;
+        token.role = result.role;
+        token.email = result.email;
+        token.name = result.nickname;
+
+        token.accessToken = result.accessToken;
+        token.refreshToken = result.refreshToken;
+        token.accessTokenExpires = Date.now() + 1000 * 60 * 60; //1h
+
+        return token;
       }
+      //자체 로그인
+      if (account?.provider === "credentials") {
+        if (user) {
+          token.id = user.email;
+          token.role = user.role; // 예를 들어, 사용자의 역할(Role)을 JWT에 포함
+          token.email = user.email;
+          token.name = user.nickname;
 
+          token.accessToken = user.accessToken;
+          token.refreshToken = user.refreshToken;
+          token.accessTokenExpires = Date.now() + 1000 * 60 * 60; //1h
+        }
+      }
       return token;
     },
 
     async session({ session, token }) {
-      console.log("session--------------------");
+      // console.log("token--------------------");
+      // console.log(token);
+
+      // console.log("session--------------------");
       session.user.id = token.id;
       session.user.role = token.role;
       session.user.email = token.email;
-      session.user.name = token.nickname;
+      session.user.name = token.name;
 
       session.user.accessToken = token.accessToken;
       session.user.refreshToken = token.refreshToken;
       session.user.expiresAt = Date.now() + 1000 * 60 * 60;
+
+      // console.log(session);
 
       return session;
     },
